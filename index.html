@@ -202,6 +202,101 @@
   .restart-btn:hover{border-color:var(--text-dim);color:var(--text)}
   .animate-in{animation:countUp .6s cubic-bezier(.22,1,.36,1) forwards}
   @keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+
+  /* ====== MOBILE OPTIMIZATIONS ====== */
+  @media (max-width:480px){
+    .app{padding:24px 14px 48px}
+
+    /* ヘッダー */
+    .header{margin-bottom:24px}
+    .header p{font-size:13px}
+
+    /* プログレス */
+    .step-labels{margin-bottom:20px}
+    .step-label{font-size:8px}
+
+    /* オプション */
+    .option{padding:12px 12px;gap:10px}
+    .option-icon{width:34px;height:34px;font-size:20px;border-radius:8px}
+    .option-text .name{font-size:13px}
+    .option-text .desc{font-size:10px}
+    .option-check{width:18px;height:18px}
+
+    /* ボタン */
+    .btn{padding:14px 16px;font-size:14px}
+    .btn-row{margin-top:20px;gap:8px}
+
+    /* 年商入力 */
+    .input-card{padding:20px 16px}
+    .num-field{font-size:28px;width:150px}
+    .quick-btn{font-size:11px;padding:6px 10px}
+
+    /* 結果: ヒーロー */
+    .result-hero{padding:24px 16px}
+    .result-hero .big-number{font-size:clamp(28px,8vw,40px)}
+
+    /* 結果: 取りこぼし */
+    .loss-card{padding:24px 16px}
+    .loss-amount{font-size:clamp(32px,9vw,48px)}
+
+    /* タイムライン */
+    .timeline-loss{padding:16px}
+    .timeline-row .tl-amount{font-size:15px}
+
+    /* ファネル健康診断: 3カラム→縦積み+横スクロール対応 */
+    .funnel-grid{grid-template-columns:1fr 1fr;gap:8px}
+    .funnel-grid .funnel-metric:last-child{grid-column:1/-1}
+    .funnel-metric{padding:12px 8px}
+    .funnel-metric .fm-value{font-size:18px}
+    .funnel-metric .fm-label{font-size:9px}
+    .funnel-metric .fm-bench{font-size:9px;padding:2px 6px}
+
+    /* ファネルビジュアル */
+    .funnel-visual{height:80px}
+    .funnel-stage-label{font-size:9px}
+    .funnel-bar-label{font-size:9px}
+    .funnel-conversion-rate{font-size:8px}
+
+    /* ゲージ */
+    .gauge-section{padding:16px}
+    .gauge-track{height:26px;margin-bottom:14px}
+    .gauge-numbers{gap:4px}
+    .gauge-num .label{font-size:9px}
+    .gauge-num .value{font-size:14px}
+    .gauge-arrow{font-size:14px}
+
+    /* フォロワー単価比較 */
+    .per-follower-card{padding:16px}
+    .pf-box{padding:12px 8px}
+    .pf-box .pf-value{font-size:20px}
+    .pf-arrow{font-size:18px}
+    .pf-multiplier{font-size:13px}
+
+    /* モデルバー */
+    .model-section{padding:16px}
+    .model-bar .model-name{min-width:72px;font-size:9px}
+    .model-bar .bar-fill{font-size:9px;padding-left:6px}
+    .model-bar .bar-status{min-width:46px;font-size:9px}
+    .model-bar.recommended::after{font-size:8px;right:-2px}
+
+    /* インサイト */
+    .insight-box{padding:16px}
+    .insight-box p{font-size:12px}
+    .insight-box h3{font-size:14px}
+
+    /* ボトルネック */
+    .bottleneck-card{padding:16px}
+    .bottleneck-item .bn-text{font-size:11px}
+
+    /* CTA */
+    .cta-box{padding:28px 16px}
+    .cta-box h3{font-size:16px}
+    .cta-box p{font-size:12px}
+    .cta-btn{padding:14px 28px;font-size:14px}
+
+    /* ランクバッジ */
+    .rank-badge{font-size:11px;padding:4px 12px}
+  }
 </style>
 </head>
 <body>
