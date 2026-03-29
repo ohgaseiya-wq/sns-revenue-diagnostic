@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あなたのSNSフォロワー1人あたりの収益ポテンシャル診断</title>
+<meta name="description" content="5つの質問に答えるだけで、SNSフォロワー1人あたりの収益ポテンシャルと取りこぼし額が明らかになります。無料診断ツール。">
+<meta property="og:title" content="SNSフォロワー収益ポテンシャル診断">
+<meta property="og:description" content="5つの質問に答えるだけで、取りこぼし額とファネルのボトルネックが明らかになります">
+<meta property="og:type" content="website">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=DM+Sans:wght@400;500;700;900&display=swap');
+  :root {
+    --bg:#07070c;--card:#0e0e16;--card-border:#1a1a2a;--card-hover:#14141f;
+    --text:#e8e8f0;--text-dim:#6a6a80;--accent:#6366f1;--accent-glow:rgba(99,102,241,.25);
+    --gold:#f59e0b;--green:#10b981;--red:#ef4444;--radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans JP','DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 20%,rgba(99,102,241,.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(139,92,246,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+  .app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:40px 20px 60px;min-height:100vh}
+
+  /* HEADER */
+  .header{text-align:center;margin-bottom:36px}
+  .header .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);padding:6px 16px;border-radius:100px;margin-bottom:20px}
+  .header h1{font-size:clamp(22px,5vw,32px);font-weight:900;line-height:1.4;margin-bottom:12px;letter-spacing:-.02em}
+  .header h1 em{font-style:normal;background:linear-gradient(135deg,#818cf8,#c084fc,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .header p{font-size:14px;color:var(--text-dim);line-height:1.7}
+
+  /* PROGRESS */
+  .progress-bar{display:flex;gap:5px;margin-bottom:24px}
+  .progress-step{flex:1;height:4px;background:var(--card-border);border-radius:4px;transition:all .4s}
+  .progress-step.active,.progress-step.done{background:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+  .step-labels{display:flex;justify-content:space-between;margin-bottom:28px;padding:0 2px}
+  .step-label{font-size:9px;font-weight:600;color:var(--text-dim);transition:color .3s}
+  .step-label.active{color:var(--accent)}.step-label.done{color:var(--green)}
+
+  /* SCREENS */
+  .screen{display:none;animation:fadeIn .4s ease}.screen.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .screen-title{font-size:18px;font-weight:700;margin-bottom:6px}
+  .screen-subtitle{font-size:13px;color:var(--text-dim);margin-bottom:24px}
+
+  /* OPTIONS */
+  .options{display:flex;flex-direction:column;gap:10px}
+  .option{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:15px 16px;cursor:pointer;transition:all .2s;user-select:none}
+  .option:hover{background:var(--card-hover);border-color:rgba(99,102,241,.3);transform:translateY(-1px)}
+  .option.selected{border-color:var(--accent);background:rgba(99,102,241,.06);box-shadow:0 0 24px var(--accent-glow)}
+  .option-icon{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(255,255,255,.03);flex-shrink:0}
+  .option-text{flex:1}.option-text .name{font-size:14px;font-weight:700;margin-bottom:1px}.option-text .desc{font-size:11px;color:var(--text-dim);line-height:1.4}
+  .option-check{width:20px;height:20px;border:2px solid var(--card-border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .option.selected .option-check{border-color:var(--accent);background:var(--accent)}
+  .option.selected .option-check::after{content:'\2713';color:#fff;font-size:11px;font-weight:900}
+  .options.multi .option-check{border-radius:5px}
+
+  /* INPUT GROUPS */
+  .input-card{background:var(--card);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:28px 24px;text-align:center}
+  .input-card label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:16px}
+  .input-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px}
+  .input-row .yen{font-size:28px;font-weight:900;color:var(--text-dim)}
+  .num-field{font-family:'DM Sans',sans-serif;font-size:36px;font-weight:900;background:transparent;border:none;border-bottom:3px solid var(--card-border);color:var(--text);text-align:center;width:180px;padding:8px 0;outline:none;transition:border-color .3s}
+  .num-field:focus{border-color:var(--accent)}
+  .num-field::placeholder{color:#333;font-size:22px}
+  .input-row .unit-label{font-size:18px;font-weight:700;color:var(--text-dim)}
+  .quick-select{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+  .quick-btn{font-family:inherit;font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--card-border);color:var(--text-dim);cursor:pointer;transition:all .2s}
+  .quick-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .quick-btn.active{border-color:var(--accent);background:rgba(99,102,241,.1);color:var(--accent)}
+  .skip-note{font-size:11px;color:#444;margin-top:12px}
+
+  /* BUTTONS */
+  .btn-row{display:flex;gap:12px;margin-top:28px}
+  .btn{flex:1;padding:16px 24px;border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+  .btn:disabled{opacity:.3;cursor:not-allowed}
+  .btn-back{background:var(--card);color:var(--text-dim);border:1px solid var(--card-border);flex:0 0 auto;padding:16px 20px}
+  .btn-back:hover:not(:disabled){background:var(--card-hover)}
+  .btn-next{background:var(--accent);color:#fff;box-shadow:0 4px 20px var(--accent-glow)}
+  .btn-next:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 30px var(--accent-glow)}
+  .btn-diagnose{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:16px;box-shadow:0 4px 24px var(--accent-glow)}
+  .btn-diagnose:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 36px var(--accent-glow)}
+
+  /* ====== RESULT STYLES ====== */
+  .result-hero{text-align:center;padding:32px 24px;background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.05));border:1px solid rgba(99,102,241,.15);border-radius:20px;margin-bottom:20px;position:relative;overflow:hidden}
+  .result-hero::before{content:'';position:absolute;top:-40%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,.1),transparent 70%);pointer-events:none}
+  .result-hero .your-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .result-hero .big-number{font-family:'DM Sans',sans-serif;font-size:clamp(34px,9vw,52px);font-weight:900;background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:4px}
+  .result-hero .unit{font-size:13px;color:var(--text-dim);margin-bottom:14px}
+  .rank-badge{display:inline-block;font-size:12px;font-weight:800;padding:5px 16px;border-radius:100px}
+  .rank-ss{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff}
+  .rank-s{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
+  .rank-a{background:linear-gradient(135deg,#059669,#047857);color:#fff}
+  .rank-b{background:linear-gradient(135deg,#d97706,#b45309);color:#fff}
+  .rank-c{background:linear-gradient(135deg,#64748b,#475569);color:#fff}
+
+  /* LOSS */
+  .loss-card{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(239,68,68,.03));border:1.5px solid rgba(239,68,68,.25);border-radius:20px;padding:32px 24px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden}
+  .loss-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(239,68,68,.02) 10px,rgba(239,68,68,.02) 20px);pointer-events:none}
+  .loss-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:6px;position:relative}
+  .loss-sublabel{font-size:13px;color:#888;margin-bottom:14px;position:relative}
+  .loss-amount{font-family:'DM Sans',sans-serif;font-size:clamp(36px,10vw,60px);font-weight:900;color:var(--red);line-height:1.1;position:relative;text-shadow:0 0 40px rgba(239,68,68,.3)}
+  .loss-note{font-size:12px;color:#666;line-height:1.7;position:relative;margin-top:12px}
+  .loss-note strong{color:#ccc}
+  @keyframes pulseRed{0%,100%{box-shadow:0 0 20px rgba(239,68,68,.15)}50%{box-shadow:0 0 40px rgba(239,68,68,.3)}}
+  .pulse-red{animation:pulseRed 2s infinite}
+
+  /* TIMELINE */
+  .timeline-loss{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.12);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+  .timeline-loss h3{font-size:14px;font-weight:700;color:var(--red);margin-bottom:14px}
+  .timeline-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(239,68,68,.08)}
+  .timeline-row:last-child{border-bottom:none}
+  .timeline-row .tl-period{font-size:13px;color:#888;font-weight:600}
+  .timeline-row .tl-amount{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:900;color:var(--red)}
+
+  /* GAUGE */
+  .gauge-section{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+  .gauge-section h3,.model-section h3,.funnel-section h3,.per-follower-card h3{font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:16px;letter-spacing:.05em}
+  .gauge-track{width:100%;height:32px;background:rgba(255,255,255,.03);border-radius:10px;position:relative;overflow:visible;margin-bottom:18px}
+  .gauge-current{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#64748b,#94a3b8);border-radius:10px;display:flex;align-items:center;padding:0 10px;font-size:10px;font-weight:700;color:#fff;transition:width 1s cubic-bezier(.22,1,.36,1);z-index:2;min-width:36px}
+  .gauge-potential{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,rgba(99,102,241,.3),rgba(139,92,246,.4));border:2px dashed rgba(139,92,246,.5);border-radius:10px;transition:width 1.2s cubic-bezier(.22,1,.36,1);z-index:1}
+  .gauge-numbers{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .gauge-num{text-align:center;flex:1}
+  .gauge-num .label{font-size:10px;color:var(--text-dim);margin-bottom:4px}
+  .gauge-num .value{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:900}
+  .gauge-num .value.current{color:#94a3b8}.gauge-num .value.potential{color:var(--accent)}.gauge-num .value.gap{color:var(--red)}
+  .gauge-arrow{font-size:20px;color:var(--text-dim);align-self:center;padding-top:10px;flex:0}
+
+  /* FUNNEL HEALTH */
+  .funnel-section{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+  .funnel-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .funnel-metric{text-align:center;padding:16px 10px;border-radius:12px;background:rgba(255,255,255,.02)}
+  .funnel-metric .fm-label{font-size:10px;color:var(--text-dim);margin-bottom:6px;line-height:1.4}
+  .funnel-metric .fm-value{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:900;margin-bottom:4px}
+  .funnel-metric .fm-bench{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;display:inline-block}
+  .fm-good{color:var(--green)}.fm-good .fm-value{color:var(--green)}
+  .fm-warn{color:var(--gold)}.fm-warn .fm-value{color:var(--gold)}
+  .fm-bad{color:var(--red)}.fm-bad .fm-value{color:var(--red)}
+  .fm-bench.good{background:rgba(16,185,129,.1);color:var(--green)}
+  .fm-bench.warn{background:rgba(245,158,11,.1);color:var(--gold)}
+  .fm-bench.bad{background:rgba(239,68,68,.1);color:var(--red)}
+
+  .funnel-visual{display:flex;align-items:stretch;gap:0;margin:20px 0 10px;position:relative;height:100px}
+  .funnel-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;text-align:center}
+  .funnel-bar{width:100%;border-radius:6px 6px 0 0;transition:height .8s cubic-bezier(.22,1,.36,1);position:relative;min-height:8px}
+  .funnel-bar-label{font-size:10px;font-weight:700;color:#fff;position:absolute;top:6px;left:0;right:0;text-align:center}
+  .funnel-stage-label{font-size:10px;color:var(--text-dim);margin-top:6px;font-weight:600}
+  .funnel-arrow{position:absolute;top:50%;font-size:14px;color:#444;z-index:2}
+  .funnel-conversion-rate{font-size:9px;color:var(--gold);font-weight:700;position:absolute;top:-16px;left:0;right:0;text-align:center}
+
+  /* PER FOLLOWER */
+  .per-follower-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+  .pf-comparison{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+  .pf-box{text-align:center;padding:16px 10px;border-radius:14px}
+  .pf-box.current-box{background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.15)}
+  .pf-box.potential-box{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)}
+  .pf-box .pf-label{font-size:11px;color:var(--text-dim);margin-bottom:8px}
+  .pf-box .pf-value{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:900}
+  .pf-box.current-box .pf-value{color:#94a3b8}.pf-box.potential-box .pf-value{color:var(--accent)}
+  .pf-arrow{font-size:24px;color:var(--text-dim);text-align:center}
+  .pf-multiplier{text-align:center;margin-top:10px;font-size:14px;font-weight:700;color:var(--gold)}
+
+  /* MODEL BARS */
+  .model-section{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+  .model-bars{display:flex;flex-direction:column;gap:10px}
+  .model-bar{display:flex;align-items:center;gap:8px}
+  .model-bar .model-name{font-size:10px;font-weight:600;min-width:100px;color:var(--text-dim);text-align:right}
+  .model-bar .bar-track{flex:1;height:26px;background:rgba(255,255,255,.03);border-radius:7px;overflow:hidden}
+  .model-bar .bar-fill{height:100%;border-radius:7px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;color:#fff;transition:width .8s cubic-bezier(.22,1,.36,1);white-space:nowrap}
+  .bar-fill.tier-ss{background:linear-gradient(90deg,#7c3aed,#8b5cf6)}
+  .bar-fill.tier-s{background:linear-gradient(90deg,#2563eb,#3b82f6)}
+  .bar-fill.tier-a{background:linear-gradient(90deg,#059669,#10b981)}
+  .bar-fill.tier-b{background:linear-gradient(90deg,#d97706,#f59e0b)}
+  .bar-fill.tier-c{background:linear-gradient(90deg,#64748b,#94a3b8)}
+  .model-bar .bar-status{font-size:10px;font-weight:700;min-width:60px;text-align:right}
+  .model-bar.recommended{position:relative}
+  .model-bar.recommended::after{content:'\1F451 \u63A8\u5968';font-size:9px;font-weight:700;color:var(--gold);position:absolute;right:0;top:-14px}
+
+  /* INSIGHTS */
+  .insight-box{background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.12);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+  .insight-box h3{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .insight-box p{font-size:13px;color:#aaa;line-height:1.9}
+  .insight-box strong{color:var(--text)}.insight-box .hl{color:var(--accent);font-weight:700}
+
+  /* BOTTLENECK */
+  .bottleneck-card{background:rgba(245,158,11,.05);border:1.5px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+  .bottleneck-card h3{font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px}
+  .bottleneck-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(245,158,11,.08)}
+  .bottleneck-item:last-child{border-bottom:none}
+  .bottleneck-item .bn-icon{font-size:18px;flex-shrink:0;margin-top:2px}
+  .bottleneck-item .bn-text{font-size:12px;color:#999;line-height:1.7}
+  .bottleneck-item .bn-text strong{color:#ccc}
+
+  /* CTA */
+  .cta-box{background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.06));border:2px solid rgba(99,102,241,.25);border-radius:20px;padding:36px 24px;text-align:center;margin-top:24px;position:relative;overflow:hidden}
+  .cta-box::before{content:'';position:absolute;top:-60%;left:-30%;width:160%;height:160%;background:radial-gradient(ellipse,rgba(99,102,241,.08),transparent 60%);pointer-events:none}
+  .cta-box h3{font-size:18px;font-weight:900;margin-bottom:12px;position:relative;background:linear-gradient(135deg,#818cf8,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .cta-box p{font-size:13px;color:#999;line-height:1.8;margin-bottom:20px;position:relative}
+  .cta-box p strong{color:#ccc}
+  .cta-btn{display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-family:inherit;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;transition:all .2s;text-decoration:none;position:relative;box-shadow:0 4px 24px var(--accent-glow)}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(99,102,241,.4)}
+  .cta-sub{font-size:11px;color:#555;margin-top:12px;position:relative}
+  .restart-btn{display:block;margin:24px auto 0;background:none;border:1px solid var(--card-border);color:var(--text-dim);font-family:inherit;font-size:13px;font-weight:600;padding:12px 24px;border-radius:10px;cursor:pointer;transition:all .2s}
+  .restart-btn:hover{border-color:var(--text-dim);color:var(--text)}
+  .animate-in{animation:countUp .6s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="badge">&#x1F4CA; &#x7121;&#x6599;&#x8A3A;&#x65AD;&#x30C4;&#x30FC;&#x30EB;</div>
+    <h1>あなたのSNSフォロワー<br><em>1人あたりの収益ポテンシャル</em><br>は、いくら？</h1>
+    <p>5つの質問に答えるだけで、取りこぼし額と<br>ファネルのボトルネックが明らかになります</p>
+  </div>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="step-labels" id="stepLabels"></div>
+
+  <!-- STEP 1: ジャンル -->
+  <div class="screen active" id="screen1">
+    <div class="screen-title">あなたの発信ジャンルは？</div>
+    <div class="screen-subtitle">最も近いものを1つ選んでください</div>
+    <div class="options" id="genreOpts"></div>
+    <div class="btn-row"><button class="btn btn-next" id="btn1" disabled onclick="goTo(2)">次へ →</button></div>
+  </div>
+
+  <!-- STEP 2: フォロワー数 -->
+  <div class="screen" id="screen2">
+    <div class="screen-title">現在のフォロワー数は？</div>
+    <div class="screen-subtitle">全SNS合算の目安でOKです</div>
+    <div class="options" id="followerOpts"></div>
+    <div class="btn-row"><button class="btn btn-back" onclick="goTo(1)">←</button><button class="btn btn-next" id="btn2" disabled onclick="goTo(3)">次へ →</button></div>
+  </div>
+
+  <!-- STEP 3: リスト数 -->
+  <div class="screen" id="screen3">
+    <div class="screen-title">メルマガ・LINE等のリスト数は？</div>
+    <div class="screen-subtitle">見込み客リスト（メール / LINE / 公式アカウント）の合計</div>
+    <div class="options" id="listOpts"></div>
+    <div class="btn-row"><button class="btn btn-back" onclick="goTo(2)">←</button><button class="btn btn-next" id="btn3" disabled onclick="goTo(4)">次へ →</button></div>
+  </div>
+
+  <!-- STEP 4: マネタイズ -->
+  <div class="screen" id="screen4">
+    <div class="screen-title">現在のマネタイズ方法は？</div>
+    <div class="screen-subtitle">当てはまるものを全て選択</div>
+    <div class="options multi" id="monetizeOpts"></div>
+    <div class="btn-row"><button class="btn btn-back" onclick="goTo(3)">←</button><button class="btn btn-next" id="btn4" disabled onclick="goTo(5)">次へ →</button></div>
+  </div>
+
+  <!-- STEP 5: 年商 -->
+  <div class="screen" id="screen5">
+    <div class="screen-title">SNS経由の現在の年商は？</div>
+    <div class="screen-subtitle">大まかな数字でOK。正確でなくて構いません</div>
+    <div class="input-card">
+      <label>SNSからの直接的・間接的な年間売上</label>
+      <div class="input-row">
+        <span class="yen">&#165;</span>
+        <input type="text" class="num-field" id="revenueInput" placeholder="0" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');S.revenue=parseInt(this.value)||0">
+        <span class="unit-label">万円</span>
+      </div>
+      <div class="quick-select" id="revenueQuick"></div>
+      <div class="skip-note">※ 年商を入れると「取りこぼし額」が計算されます</div>
+    </div>
+    <div class="btn-row"><button class="btn btn-back" onclick="goTo(4)">←</button><button class="btn btn-diagnose" onclick="showResult()">&#x1F50D; 診断結果を見る</button></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screenResult"></div>
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const STEPS = [
+  {id:1, label:'\u30B8\u30E3\u30F3\u30EB'},
+  {id:2, label:'\u30D5\u30A9\u30ED\u30EF\u30FC'},
+  {id:3, label:'\u30EA\u30B9\u30C8\u6570'},
+  {id:4, label:'\u30DE\u30CD\u30BF\u30A4\u30BA'},
+  {id:5, label:'\u5E74\u5546'}
+];
+
+const GENRES = [
+  {v:'business',icon:'\uD83D\uDCBC',name:'\u30D3\u30B8\u30CD\u30B9\u6559\u80B2',desc:'\u8D77\u696D\u30FB\u30DE\u30FC\u30B1\u30FB\u30BB\u30FC\u30EB\u30B9\u30FB\u7D4C\u55B6'},
+  {v:'coaching',icon:'\uD83E\uDDE0',name:'\u30B3\u30FC\u30C1\u30F3\u30B0\u30FB\u81EA\u5DF1\u5553\u767A',desc:'\u30E1\u30F3\u30BF\u30EB\u30FB\u30AD\u30E3\u30EA\u30A2\u30FB\u30E9\u30A4\u30D5\u30C7\u30B6\u30A4\u30F3'},
+  {v:'tech',icon:'\uD83D\uDDA5\uFE0F',name:'\u30C6\u30C3\u30AF\u30FBAI',desc:'\u30D7\u30ED\u30B0\u30E9\u30DF\u30F3\u30B0\u30FBAI\u6D3B\u7528\u30FB\u30AC\u30B8\u30A7\u30C3\u30C8'},
+  {v:'love',icon:'\uD83D\uDC95',name:'\u604B\u611B\u30FB\u5A5A\u6D3B',desc:'\u30E2\u30C6\u30FB\u30D1\u30FC\u30C8\u30CA\u30FC\u30B7\u30C3\u30D7\u30FB\u7D50\u5A5A\u76F8\u8AC7'},
+  {v:'beauty',icon:'\uD83D\uDC84',name:'\u7F8E\u5BB9\u30FB\u30B3\u30B9\u30E1',desc:'\u30B9\u30AD\u30F3\u30B1\u30A2\u30FB\u30E1\u30A4\u30AF\u30FB\u30A8\u30B9\u30C6'},
+  {v:'fitness',icon:'\uD83D\uDCAA',name:'\u30D5\u30A3\u30C3\u30C8\u30CD\u30B9\u30FB\u5065\u5EB7',desc:'\u7B4B\u30C8\u30EC\u30FB\u30C0\u30A4\u30A8\u30C3\u30C8\u30FB\u30E8\u30AC\u30FB\u6804\u990A'},
+  {v:'food',icon:'\uD83C\uDF73',name:'\u6599\u7406\u30FB\u30B0\u30EB\u30E1',desc:'\u30EC\u30B7\u30D4\u30FB\u98DF\u30EC\u30DD\u30FB\u30AB\u30D5\u30A7\u30FB\u98F2\u98DF'},
+  {v:'travel',icon:'\u2708\uFE0F',name:'\u65C5\u884C\u30FB\u30E9\u30A4\u30D5\u30B9\u30BF\u30A4\u30EB',desc:'\u6D77\u5916\u65C5\u884C\u30FB\u66AE\u3089\u3057\u30FB\u30A4\u30F3\u30C6\u30EA\u30A2'},
+  {v:'entertainment',icon:'\uD83C\uDFAE',name:'\u30A8\u30F3\u30BF\u30E1',desc:'\u30B2\u30FC\u30E0\u30FB\u304A\u7B11\u3044\u30FBVlog\u30FB\u97F3\u697D'},
+];
+
+const FOLLOWERS = [
+  {v:'500',icon:'\uD83C\uDF31',name:'\u301C500\u4EBA',desc:'\u5C11\u6570\u7CBE\u92ED\u3067\u5341\u5206\u6226\u3048\u308B\u30B9\u30C6\u30FC\u30B8'},
+  {v:'1000',icon:'\uD83C\uDF3F',name:'500\u301C1,000\u4EBA',desc:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u52DD\u8CA0\u306E\u6700\u9069\u30BE\u30FC\u30F3'},
+  {v:'3000',icon:'\uD83C\uDF33',name:'1,000\u301C5,000\u4EBA',desc:'Value Ladder\u69CB\u7BC9\u30D5\u30A7\u30FC\u30BA'},
+  {v:'7500',icon:'\uD83C\uDFD4\uFE0F',name:'5,000\u301C1\u4E07\u4EBA',desc:'\u8907\u6570\u53CE\u76CA\u6E90\u3092\u7D44\u3080\u4F59\u5730\u304C\u3042\u308B'},
+  {v:'30000',icon:'\uD83D\uDE80',name:'1\u4E07\u301C5\u4E07\u4EBA',desc:'\u4F01\u696D\u6848\u4EF6\u3082\u8996\u91CE\u306B\u5165\u308B\u30B9\u30C6\u30FC\u30B8'},
+  {v:'100000',icon:'\uD83D\uDC51',name:'5\u4E07\u4EBA\u4EE5\u4E0A',desc:'\u5168\u30DE\u30CD\u30BF\u30A4\u30BA\u30E2\u30C7\u30EB\u304C\u6A5F\u80FD\u3059\u308B\u898F\u6A21'},
+];
+
+const LISTS = [
+  {v:'0',icon:'\uD83D\uDEAB',name:'\u30EA\u30B9\u30C8\u306A\u3057\uFF080\u4EBA\uFF09',desc:'\u307E\u3060\u30EA\u30B9\u30C8\u69CB\u7BC9\u3057\u3066\u3044\u306A\u3044'},
+  {v:'100',icon:'\uD83D\uDCCB',name:'\u301C100\u4EBA',desc:'\u30EA\u30B9\u30C8\u69CB\u7BC9\u3092\u59CB\u3081\u305F\u3070\u304B\u308A'},
+  {v:'300',icon:'\uD83D\uDCEC',name:'100\u301C500\u4EBA',desc:'\u30CA\u30FC\u30C1\u30E3\u30EA\u30F3\u30B0\u306E\u52B9\u679C\u304C\u51FA\u59CB\u3081\u308B'},
+  {v:'1000',icon:'\uD83D\uDCEE',name:'500\u301C1,000\u4EBA',desc:'\u30BB\u30FC\u30EB\u30B9\u30D5\u30A1\u30CD\u30EB\u304C\u672C\u683C\u7A3C\u50CD'},
+  {v:'3000',icon:'\uD83D\uDCE6',name:'1,000\u301C5,000\u4EBA',desc:'\u5B89\u5B9A\u7684\u306A\u30BB\u30FC\u30EB\u30B9\u304C\u53EF\u80FD'},
+  {v:'7500',icon:'\uD83C\uDFE2',name:'5,000\u301C1\u4E07\u4EBA',desc:'\u8907\u6570\u30AA\u30D5\u30A1\u30FC\u3092\u540C\u6642\u306B\u56DE\u305B\u308B'},
+  {v:'20000',icon:'\uD83C\uDFDB\uFE0F',name:'1\u4E07\u4EBA\u4EE5\u4E0A',desc:'\u5F37\u56FA\u306A\u30A2\u30BB\u30C3\u30C8\u3002\u904B\u7528\u6B21\u7B2C\u3067\u5104\u8D85\u3048'},
+];
+
+const MONETIZE = [
+  {v:'highticket',icon:'\uD83D\uDC8E',name:'\u81EA\u793E\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC\uFF08120\u4E07\u5186\u4EE5\u4E0A\uFF09',desc:'\u5E74\u9593\u9867\u554F\u30FB\u30DE\u30B9\u30BF\u30FC\u30DE\u30A4\u30F3\u30C9\u30FBVIP\u30D7\u30ED\u30B0\u30E9\u30E0'},
+  {v:'backend',icon:'\uD83C\uDFAF',name:'\u81EA\u793E\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1\uFF0830\u4E07\u301C120\u4E07\u5186\uFF09',desc:'\u30B3\u30F3\u30B5\u30EB\u30FB\u8B1B\u5EA7\u30FB\u30B0\u30EB\u30FC\u30D7\u30B3\u30FC\u30C1\u30F3\u30B0'},
+  {v:'middle',icon:'\uD83D\uDCE6',name:'\u81EA\u793E\u30DF\u30C9\u30EB\u5546\u54C1\uFF083\u4E07\u301C30\u4E07\u5186\uFF09',desc:'\u30AA\u30F3\u30E9\u30A4\u30F3\u6559\u6750\u30FB\u30EF\u30FC\u30AF\u30B7\u30E7\u30C3\u30D7'},
+  {v:'community',icon:'\uD83D\uDC65',name:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3 / \u30B5\u30D6\u30B9\u30AF',desc:'\u6708\u984D\u8AB2\u91D1\u578B\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3'},
+  {v:'affiliate',icon:'\uD83E\uDD1D',name:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8',desc:'\u4ED6\u793E\u5546\u54C1\u306E\u7D39\u4ECB\u5831\u916C'},
+  {v:'sponsor',icon:'\uD83D\uDCE2',name:'\u4F01\u696D\u6848\u4EF6',desc:'\u30BF\u30A4\u30A2\u30C3\u30D7\u30FBPR\u6295\u7A3F'},
+  {v:'adsense',icon:'\uD83D\uDCFA',name:'\u5E83\u544A\u53CE\u76CA',desc:'YouTube\u5E83\u544A\u7B49'},
+  {v:'none',icon:'\uD83D\uDEAB',name:'\u307E\u3060\u30DE\u30CD\u30BF\u30A4\u30BA\u3057\u3066\u3044\u306A\u3044',desc:'\u3053\u308C\u304B\u3089\u59CB\u3081\u305F\u3044'},
+];
+
+const REVENUE_QUICK = [0,100,300,500,1000,3000,5000,10000];
+const REVENUE_LABELS = {'0':'0\uFF08\u672A\u53CE\u76CA\uFF09','100':'100\u4E07','300':'300\u4E07','500':'500\u4E07','1000':'1,000\u4E07','3000':'3,000\u4E07','5000':'5,000\u4E07','10000':'1\u5104\u4EE5\u4E0A'};
+
+const DATA = {
+  business:{name:'\u30D3\u30B8\u30CD\u30B9\u6559\u80B2',icon:'\uD83D\uDCBC',models:{
+    highticket:{range:[4000,12000],tier:'ss',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[1500,5000],tier:'ss',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[500,2000],tier:'s',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[300,1500],tier:'s',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[100,400],tier:'a',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[100,300],tier:'a',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[30,100],tier:'b',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u30D3\u30B8\u30CD\u30B9\u6559\u80B2\u306F\u30D5\u30A9\u30ED\u30EF\u30FC1\u4EBA\u3042\u305F\u308A\u306E\u53CE\u76CA\u6027\u304C<strong>\u5168\u30B8\u30E3\u30F3\u30EB\u4E2D\u30C8\u30C3\u30D7</strong>\u3002\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC\uFF08120\u4E07\u5186\u301C\uFF09\u00D7 \u30D5\u30A1\u30CD\u30EB\u3067\u3001\u5C11\u30D5\u30A9\u30ED\u30EF\u30FC\u3067\u3082\u6708\u5546100\u4E07\u5186\u4EE5\u4E0A\u304C\u73FE\u5B9F\u7684\u3002Value Ladder\u306E\u5168\u968E\u5C64\u304C\u9AD8\u5358\u4FA1\u3067\u6A5F\u80FD\u3059\u308B\u306E\u304C\u6700\u5927\u306E\u5F37\u307F\u3002',recommended:'highticket',benchListRate:8,benchListRevenue:3000},
+
+  coaching:{name:'\u30B3\u30FC\u30C1\u30F3\u30B0\u30FB\u81EA\u5DF1\u5553\u767A',icon:'\uD83E\uDDE0',models:{
+    highticket:{range:[2000,7000],tier:'ss',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[1000,3500],tier:'ss',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[300,1000],tier:'s',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[200,800],tier:'a',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[30,100],tier:'b',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[50,150],tier:'b',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[10,50],tier:'c',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u30B3\u30FC\u30C1\u30F3\u30B0\u7CFB\u306F<strong>\u300C\u4EBA\u751F\u304C\u5909\u308F\u308B\u300D\u6DF1\u3044\u5909\u5BB9\u3092\u63D0\u4F9B</strong>\u3067\u304D\u3001\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u3068\u306E\u76F8\u6027\u304C\u6975\u3081\u3066\u9AD8\u3044\u3002\u5E74\u9593\u9867\u554F\u578B\u3084\u30DE\u30B9\u30BF\u30FC\u30DE\u30A4\u30F3\u30C9\u3067120\u4E07\u5186\u4EE5\u4E0A\u3082\u5341\u5206\u6210\u7ACB\u3059\u308B\u30B8\u30E3\u30F3\u30EB\u3002',recommended:'highticket',benchListRate:6,benchListRevenue:2500},
+
+  tech:{name:'\u30C6\u30C3\u30AF\u30FBAI',icon:'\uD83D\uDDA5\uFE0F',models:{
+    highticket:{range:[1500,6000],tier:'ss',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[800,3000],tier:'ss',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[300,800],tier:'s',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[200,600],tier:'a',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[100,300],tier:'a',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[100,400],tier:'a',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[30,80],tier:'b',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u30C6\u30C3\u30AF\u30FBAI\u9818\u57DF\u306F<strong>\u4F01\u696D\u7814\u4FEE\u30FB\u6CD5\u4EBA\u30B3\u30F3\u30B5\u30EB\u306E\u30CB\u30FC\u30BA\u304C\u6025\u62E1\u5927</strong>\u3002\u500B\u4EBA\u5411\u3051\u3060\u3051\u3067\u306A\u304F\u6CD5\u4EBA\u5411\u3051\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC\u3082\u7D44\u3081\u308B\u5E0C\u5C11\u306A\u30B8\u30E3\u30F3\u30EB\u3002',recommended:'highticket',benchListRate:7,benchListRevenue:2000},
+
+  love:{name:'\u604B\u611B\u30FB\u5A5A\u6D3B',icon:'\uD83D\uDC95',models:{
+    highticket:{range:[1500,5000],tier:'ss',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[800,3000],tier:'ss',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[300,800],tier:'s',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[100,400],tier:'a',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[100,300],tier:'a',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[30,100],tier:'b',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[20,80],tier:'b',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u604B\u611B\u30FB\u5A5A\u6D3B\u306F<strong>3\u5927\u60A9\u307F\u306E1\u3064</strong>\u3067\u611F\u60C5\u6295\u8CC7\u304C\u6975\u3081\u3066\u9AD8\u3044\u3002\u300C\u4EBA\u751F\u306E\u30D1\u30FC\u30C8\u30CA\u30FC\u304C\u898B\u3064\u304B\u308B\u300D\u306F120\u4E07\u5186\u4EE5\u4E0A\u306E\u4FA1\u5024\u3068\u3057\u3066\u5341\u5206\u8A34\u6C42\u3067\u304D\u308B\u30C6\u30FC\u30DE\u3002',recommended:'highticket',benchListRate:10,benchListRevenue:2500},
+
+  beauty:{name:'\u7F8E\u5BB9\u30FB\u30B3\u30B9\u30E1',icon:'\uD83D\uDC84',models:{
+    highticket:{range:[100,500],tier:'a',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[80,350],tier:'a',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[50,250],tier:'b',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[50,200],tier:'b',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[100,400],tier:'a',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[100,500],tier:'a',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[10,40],tier:'c',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u7F8E\u5BB9\u306F<strong>\u4F01\u696D\u6848\u4EF6\u3068\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8\u304C\u4E3B\u6226\u5834</strong>\u3002\u300C\u5148\u751F\u696D\u300D\u306B\u8EE2\u63DB\u3067\u304D\u308C\u3070\u8A8D\u5B9A\u8B1B\u5EA7\u3084\u30B9\u30AF\u30FC\u30EB\u30D3\u30B8\u30CD\u30B9\u3067\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u3082\u53EF\u80FD\u3002',recommended:'sponsor',benchListRate:5,benchListRevenue:800},
+
+  fitness:{name:'\u30D5\u30A3\u30C3\u30C8\u30CD\u30B9\u30FB\u5065\u5EB7',icon:'\uD83D\uDCAA',models:{
+    highticket:{range:[400,1500],tier:'s',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[200,800],tier:'s',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[100,400],tier:'a',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[100,300],tier:'a',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[50,200],tier:'b',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[50,200],tier:'b',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[15,50],tier:'c',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u30D5\u30A3\u30C3\u30C8\u30CD\u30B9\u306F<strong>\u7D50\u679C\u4FDD\u8A3C\u578B\u306E\u9577\u671F\u6307\u5C0E\u30D7\u30ED\u30B0\u30E9\u30E0</strong>\u3067\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u5316\u304C\u53EF\u80FD\u30023\u301C6\u30F6\u6708\u306E\u5B8C\u5168\u5909\u8EAB\u30D7\u30ED\u30B0\u30E9\u30E0\u3067120\u4E07\u5186\u4EE5\u4E0A\u3082\u6210\u7ACB\u3059\u308B\u3002',recommended:'highticket',benchListRate:6,benchListRevenue:1200},
+
+  food:{name:'\u6599\u7406\u30FB\u30B0\u30EB\u30E1',icon:'\uD83C\uDF73',models:{
+    highticket:{range:[20,80],tier:'b',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[20,80],tier:'b',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[20,80],tier:'b',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[30,80],tier:'b',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[30,100],tier:'b',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[50,200],tier:'b',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[10,30],tier:'c',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u6599\u7406\u306F<strong>\u30D0\u30A4\u30E9\u30EB\u3057\u3084\u3059\u304F\u30D5\u30A9\u30ED\u30EF\u30FC\u7372\u5F97\u30B3\u30B9\u30C8\u304C\u4F4E\u3044</strong>\u3002\u30D5\u30FC\u30C9\u30D3\u30B8\u30CD\u30B9\u958B\u696D\u30B3\u30F3\u30B5\u30EB\u7B49\u306B\u30D4\u30DC\u30C3\u30C8\u3059\u308C\u3070\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u306E\u4F59\u5730\u3082\u3042\u308B\u304C\u3001\u57FA\u672C\u306F\u4F01\u696D\u30BF\u30A4\u30A2\u30C3\u30D7\u30FB\u66F8\u7C4D\u5316\u304C\u738B\u9053\u3002',recommended:'sponsor',benchListRate:3,benchListRevenue:500},
+
+  travel:{name:'\u65C5\u884C\u30FB\u30E9\u30A4\u30D5\u30B9\u30BF\u30A4\u30EB',icon:'\u2708\uFE0F',models:{
+    highticket:{range:[0,0],tier:'c',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[0,0],tier:'c',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[30,100],tier:'b',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[10,50],tier:'c',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[100,300],tier:'a',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[100,400],tier:'a',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[10,40],tier:'c',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u65C5\u884C\u7CFB\u306F<strong>\u89B3\u5149\u5C40\u30FB\u30DB\u30C6\u30EB\u30FB\u822A\u7A7A\u4F1A\u793E\u30BF\u30A4\u30A2\u30C3\u30D7</strong>\u304C\u6700\u5927\u53CE\u76CA\u6E90\u3002\u81EA\u793E\u5546\u54C1\u306E\u9AD8\u5358\u4FA1\u5316\u306F\u96E3\u3057\u3044\u304C\u3001\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8\u3068\u4F01\u696D\u6848\u4EF6\u306E\u30C0\u30D6\u30EB\u3067\u5B89\u5B9A\u53CE\u76CA\u3092\u69CB\u7BC9\u3067\u304D\u308B\u3002',recommended:'sponsor',benchListRate:4,benchListRevenue:600},
+
+  entertainment:{name:'\u30A8\u30F3\u30BF\u30E1',icon:'\uD83C\uDFAE',models:{
+    highticket:{range:[0,0],tier:'c',label:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC'},
+    backend:{range:[0,0],tier:'c',label:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1'},
+    middle:{range:[5,30],tier:'c',label:'\u30DF\u30C9\u30EB\u5546\u54C1'},
+    community:{range:[30,100],tier:'b',label:'\u30B3\u30DF\u30E5\u30CB\u30C6\u30A3/\u30B5\u30D6\u30B9\u30AF'},
+    affiliate:{range:[5,20],tier:'c',label:'\u30A2\u30D5\u30A3\u30EA\u30A8\u30A4\u30C8'},
+    sponsor:{range:[50,200],tier:'b',label:'\u4F01\u696D\u6848\u4EF6'},
+    adsense:{range:[5,20],tier:'c',label:'\u5E83\u544A\u53CE\u76CA'}
+  },insight:'\u30A8\u30F3\u30BF\u30E1\u306F<strong>\u30D5\u30A9\u30ED\u30EF\u30FC\u3092\u96C6\u3081\u3084\u3059\u3044\u304C1\u4EBA\u3042\u305F\u308A\u53CE\u76CA\u304C\u6700\u3082\u4F4E\u3044</strong>\u3002\u81EA\u793E\u5546\u54C1\u306E\u9AD8\u5358\u4FA1\u5316\u306F\u307B\u307C\u4E0D\u53EF\u80FD\u3067\u3001\u30E1\u30F3\u30D0\u30FC\u30B7\u30C3\u30D7\u3068\u4F01\u696D\u6848\u4EF6\u304C\u73FE\u5B9F\u7684\u306A\u53CE\u76CA\u6E90\u3002',recommended:'sponsor',benchListRate:2,benchListRevenue:400}
+};
+
+/* ===== STATE ===== */
+const S = {genre:null,followers:null,list:null,monetize:[],revenue:0};
+
+/* ===== BUILD UI ===== */
+function buildProgress(){
+  document.getElementById('progressBar').innerHTML = STEPS.map(s=>'<div class="progress-step" id="prog'+s.id+'"></div>').join('');
+  document.getElementById('stepLabels').innerHTML = STEPS.map(s=>'<span class="step-label" id="lbl'+s.id+'">'+s.label+'</span>').join('');
+}
+function buildOptions(containerId, items, key, btnId){
+  var c = document.getElementById(containerId);
+  c.innerHTML = items.map(function(it){return '<div class="option" data-value="'+it.v+'" onclick="pickOne(this,\''+key+'\',\''+btnId+'\')"><div class="option-icon">'+it.icon+'</div><div class="option-text"><div class="name">'+it.name+'</div><div class="desc">'+it.desc+'</div></div><div class="option-check"></div></div>';}).join('');
+}
+function buildMonetize(){
+  var c = document.getElementById('monetizeOpts');
+  c.innerHTML = MONETIZE.map(function(it){return '<div class="option" data-value="'+it.v+'" onclick="'+(it.v==='none'?'pickNone(this)':'pickMulti(this)')+'"><div class="option-icon">'+it.icon+'</div><div class="option-text"><div class="name">'+it.name+'</div><div class="desc">'+it.desc+'</div></div><div class="option-check"></div></div>';}).join('');
+}
+function buildRevenueQuick(){
+  document.getElementById('revenueQuick').innerHTML = REVENUE_QUICK.map(function(v){return '<button class="quick-btn" onclick="setRev('+v+',this)">'+REVENUE_LABELS[v]+'</button>';}).join('');
+}
+
+/* ===== INTERACTIONS ===== */
+function pickOne(el,key,btnId){
+  el.parentElement.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected')});
+  el.classList.add('selected'); S[key]=el.dataset.value;
+  document.getElementById(btnId).disabled=false;
+}
+function pickMulti(el){
+  var none=el.parentElement.querySelector('[data-value="none"]');
+  if(none)none.classList.remove('selected');
+  S.monetize=S.monetize.filter(function(v){return v!=='none'});
+  el.classList.toggle('selected');
+  if(el.classList.contains('selected'))S.monetize.push(el.dataset.value);
+  else S.monetize=S.monetize.filter(function(v){return v!==el.dataset.value});
+  document.getElementById('btn4').disabled=S.monetize.length===0;
+}
+function pickNone(el){
+  el.parentElement.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected')});
+  el.classList.add('selected'); S.monetize=['none'];
+  document.getElementById('btn4').disabled=false;
+}
+function setRev(val,btn){
+  document.getElementById('revenueInput').value=val; S.revenue=val;
+  document.querySelectorAll('#revenueQuick .quick-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+}
+function goTo(step){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById('screen'+step).classList.add('active');
+  STEPS.forEach(function(s){
+    var p=document.getElementById('prog'+s.id),l=document.getElementById('lbl'+s.id);
+    p.className='progress-step';l.className='step-label';
+    if(s.id<step){p.classList.add('done');l.classList.add('done')}
+    if(s.id===step){p.classList.add('active');l.classList.add('active')}
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function fmtY(n){
+  if(n>=100000000)return(n/100000000).toFixed(1).replace(/\.0$/,'')+'\u5104';
+  if(n>=10000)return(n/10000).toFixed(n>=100000?0:1).replace(/\.0$/,'')+'\u4E07';
+  return n.toLocaleString();
+}
+
+/* ===== RESULT ===== */
+function showResult(){
+  var g=DATA[S.genre], followers=parseInt(S.followers), listSize=parseInt(S.list);
+  var curModels=S.monetize.includes('none')?[]:S.monetize;
+  var curRevenue=S.revenue*10000;
+
+  var models=Object.entries(g.models);
+  var best=models.reduce(function(a,b){return b[1].range[1]>a[1].range[1]?b:a});
+  var sorted=[].concat(models).sort(function(a,b){return b[1].range[1]-a[1].range[1]});
+  var potMid=0; sorted.slice(0,3).forEach(function(item){potMid+=(item[1].range[0]+item[1].range[1])/2});
+  var annPot=potMid*followers;
+  var gap=Math.max(0,annPot-curRevenue);
+  var curPF=followers>0?Math.round(curRevenue/followers):0;
+  var potPF=Math.round(potMid);
+  var mult=curPF>0?(potPF/curPF).toFixed(1):'\u221E';
+
+  var listRate=followers>0?((listSize/followers)*100):0;
+  var listRateStr=listRate.toFixed(1);
+  var benchLR=g.benchListRate;
+  var lrStatus=listRate>=benchLR?'good':listRate>=benchLR*0.5?'warn':'bad';
+  var lrLabel=lrStatus==='good'?'\u696D\u754C\u5E73\u5747\u4EE5\u4E0A':lrStatus==='warn'?'\u6539\u5584\u4F59\u5730\u3042\u308A':'\u8981\u6539\u5584';
+
+  var listRevenue=listSize>0?Math.round(curRevenue/listSize):0;
+  var benchLRev=g.benchListRevenue;
+  var lrevStatus=listRevenue>=benchLRev?'good':listRevenue>=benchLRev*0.4?'warn':'bad';
+  var lrevLabel=lrevStatus==='good'?'\u696D\u754C\u5E73\u5747\u4EE5\u4E0A':lrevStatus==='warn'?'\u6539\u5584\u4F59\u5730\u3042\u308A':'\u8981\u6539\u5584';
+
+  var idealListRev=listSize>0?Math.round(annPot/listSize):0;
+
+  var funnelFollowers=followers;
+  var funnelList=listSize;
+  var estBuyers=curRevenue>0?Math.max(1,Math.round(curRevenue/300000)):0;
+  var maxF=funnelFollowers;
+  var fBarF=100, fBarL=maxF>0?Math.max(5,(funnelList/maxF)*100):5;
+  var fBarB=maxF>0?Math.max(3,(estBuyers/maxF)*100):3;
+
+  var bottlenecks=[];
+  if(listRate<benchLR*0.5) bottlenecks.push({icon:'\uD83D\uDD34',text:'<strong>\u30EA\u30B9\u30C8\u8EE2\u63DB\u7387\u304C'+listRateStr+'%</strong>\uFF08\u696D\u754C\u76EE\u5B89: '+benchLR+'%\u4EE5\u4E0A\uFF09\u3002\u30D5\u30A9\u30ED\u30EF\u30FC\u304C\u898B\u8FBC\u307F\u5BA2\u306B\u8EE2\u63DB\u3067\u304D\u3066\u3044\u307E\u305B\u3093\u3002\u30EA\u30FC\u30C9\u30DE\u30B0\u30CD\u30C3\u30C8\uFF08\u7121\u6599\u7279\u5178\uFF09\u306E\u8A2D\u8A08\u3068CTA\u5C0E\u7DDA\u306E\u6700\u9069\u5316\u304C\u6025\u52D9\u3002'});
+  else if(listRate<benchLR) bottlenecks.push({icon:'\uD83D\uDFE1',text:'<strong>\u30EA\u30B9\u30C8\u8EE2\u63DB\u7387'+listRateStr+'%</strong>\u306F\u60AA\u304F\u306A\u3044\u304C\u3001\u696D\u754C\u76EE\u5B89'+benchLR+'%\u306B\u306F\u307E\u3060\u5C4A\u3044\u3066\u3044\u307E\u305B\u3093\u3002\u30EA\u30FC\u30C9\u30DE\u30B0\u30CD\u30C3\u30C8\u306E\u30AA\u30D5\u30A1\u30FC\u5F37\u5316\u3067\u6539\u5584\u4F59\u5730\u3042\u308A\u3002'});
+  if(listSize>0 && listRevenue<benchLRev*0.4) bottlenecks.push({icon:'\uD83D\uDD34',text:'<strong>\u30EA\u30B9\u30C81\u4EF6\u3042\u305F\u308A\xA5'+listRevenue.toLocaleString()+'</strong>\uFF08\u696D\u754C\u76EE\u5B89: \xA5'+benchLRev.toLocaleString()+'\u4EE5\u4E0A\uFF09\u3002\u30EA\u30B9\u30C8\u306F\u3042\u308B\u306E\u306B\u53CE\u76CA\u5316\u3067\u304D\u3066\u3044\u307E\u305B\u3093\u3002\u30CA\u30FC\u30C1\u30E3\u30EA\u30F3\u30B0\uFF08\u6559\u80B2\u30B7\u30CA\u30EA\u30AA\uFF09\u3068\u30BB\u30FC\u30EB\u30B9\u30D5\u30A1\u30CD\u30EB\u306E\u69CB\u7BC9\u304C\u6700\u512A\u5148\u3002'});
+  else if(listSize>0 && listRevenue<benchLRev) bottlenecks.push({icon:'\uD83D\uDFE1',text:'<strong>\u30EA\u30B9\u30C8\u5358\u4FA1\xA5'+listRevenue.toLocaleString()+'</strong>\u306F\u696D\u754C\u76EE\u5B89\xA5'+benchLRev.toLocaleString()+'\u306B\u5BFE\u3057\u3066\u6539\u5584\u4F59\u5730\u3042\u308A\u3002\u30A6\u30A7\u30D3\u30CA\u30FC\u30D5\u30A1\u30CD\u30EB\u3084\u30B9\u30C6\u30C3\u30D7\u30E1\u30FC\u30EB\u306E\u6700\u9069\u5316\u3067LTV\u5411\u4E0A\u304C\u898B\u8FBC\u3081\u307E\u3059\u3002'});
+  if(listSize===0) bottlenecks.push({icon:'\uD83D\uDD34',text:'<strong>\u30EA\u30B9\u30C8\u304C\u30BC\u30ED</strong>\u306E\u72B6\u614B\u3067\u3059\u3002\u30D5\u30A9\u30ED\u30EF\u30FC\u306F\u300C\u501F\u308A\u7269\u306E\u8CC7\u7523\u300D\u3067\u3042\u308A\u3001\u3044\u3064\u30A2\u30AB\u30A6\u30F3\u30C8\u304C\u505C\u6B62\u3055\u308C\u3066\u3082\u5931\u308F\u308C\u307E\u3059\u3002\u30EA\u30B9\u30C8\uFF08\u30E1\u30FC\u30EB/LINE\uFF09\u306F\u300C\u81EA\u5206\u306E\u8CC7\u7523\u300D\u3002\u4ECA\u3059\u3050\u30EA\u30B9\u30C8\u69CB\u7BC9\u3092\u958B\u59CB\u3059\u3079\u304D\u3067\u3059\u3002'});
+  if(!curModels.includes('highticket') && !curModels.includes('backend') && ['business','coaching','tech','love','fitness'].includes(S.genre)) bottlenecks.push({icon:'\uD83D\uDD34',text:'\u3042\u306A\u305F\u306E\u30B8\u30E3\u30F3\u30EB\u306F<strong>\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u9069\u6027\u304C\u6975\u3081\u3066\u9AD8\u3044</strong>\u306E\u306B\u300130\u4E07\u5186\u4EE5\u4E0A\u306E\u81EA\u793E\u5546\u54C1\u3092\u6301\u3063\u3066\u3044\u307E\u305B\u3093\u3002Value Ladder\u306E\u9802\u70B9\u304C\u7A7A\u306E\u72B6\u614B\u3067\u3059\u3002\u3053\u308C\u304C\u53CE\u76CA\u306E\u5929\u4E95\u3092\u6C7A\u5B9A\u7684\u306B\u4E0B\u3052\u3066\u3044\u307E\u3059\u3002'});
+  else if(!curModels.includes('highticket') && curModels.includes('backend') && ['business','coaching','tech','love','fitness'].includes(S.genre)) bottlenecks.push({icon:'\uD83D\uDFE1',text:'\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u5546\u54C1\u306F\u3042\u308B\u304C<strong>120\u4E07\u5186\u4EE5\u4E0A\u306E\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC\u304C\u307E\u3060\u306A\u3044</strong>\u72B6\u614B\u3002\u5E74\u9593\u9867\u554F\u3084\u30DE\u30B9\u30BF\u30FC\u30DE\u30A4\u30F3\u30C9\u7B49\u306E\u6700\u4E0A\u4F4D\u30AA\u30D5\u30A1\u30FC\u3092\u8FFD\u52A0\u3059\u308B\u3053\u3068\u3067\u3001\u30D5\u30A9\u30ED\u30EF\u30FC1\u4EBA\u3042\u305F\u308A\u53CE\u76CA\u3092\u3055\u3089\u306B\u5F15\u304D\u4E0A\u3052\u3089\u308C\u307E\u3059\u3002'});
+  if(curModels.includes('highticket') && !curModels.includes('backend') && !curModels.includes('middle')) bottlenecks.push({icon:'\uD83D\uDFE1',text:'\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u306F\u3042\u308B\u304C<strong>\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\u30FB\u30DF\u30C9\u30EB\u306E\u4E2D\u9593\u5C64\u304C\u7A7A</strong>\u3067\u3059\u3002\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u306B\u81F3\u3089\u306A\u304B\u3063\u305F\u898B\u8FBC\u307F\u5BA2\u306E\u53D7\u3051\u76BF\u304C\u306A\u304F\u3001\u5927\u91CF\u306E\u300C\u53D6\u308A\u3053\u307C\u3057\u300D\u304C\u767A\u751F\u3057\u3066\u3044\u308B\u53EF\u80FD\u6027\u304C\u3042\u308A\u307E\u3059\u3002Value Ladder\u306E\u968E\u6BB5\u3092\u57CB\u3081\u307E\u3057\u3087\u3046\u3002'});
+
+  var gaugePct=annPot>0?Math.min(100,Math.max(3,(curRevenue/annPot)*100)):3;
+
+  var tier=best[1].tier;
+  var tierLabels={ss:'SS\u30E9\u30F3\u30AF\uFF08\u30C8\u30C3\u30D7\u7D1A\uFF09',s:'S\u30E9\u30F3\u30AF\uFF08\u512A\u79C0\uFF09',a:'A\u30E9\u30F3\u30AF\uFF08\u826F\u597D\uFF09',b:'B\u30E9\u30F3\u30AF\uFF08\u5E73\u5747\u7684\uFF09',c:'C\u30E9\u30F3\u30AF\uFF08\u8981\u6539\u5584\uFF09'};
+
+  var mGap=Math.round(gap/12),wGap=Math.round(gap/52),dGap=Math.round(gap/365);
+
+  var maxBar=sorted[0][1].range[1];
+  var barsHTML='';
+  sorted.forEach(function(item){
+    var k=item[0],v=item[1];
+    if(v.range[1]===0)return;
+    var pct=Math.max(10,(v.range[1]/maxBar)*100);
+    var isRec=k===g.recommended, isCur=curModels.includes(k);
+    barsHTML+='<div class="model-bar '+(isRec?'recommended':'')+'"><div class="model-name">'+v.label+'</div><div class="bar-track"><div class="bar-fill tier-'+v.tier+'" style="width:'+pct+'%">'+(pct>25?'\xA5'+v.range[0].toLocaleString()+'\u301C'+v.range[1].toLocaleString():'')+'</div></div><div class="bar-status" style="color:'+(isCur?'#10b981':'#444')+'">'+(isCur?'\u2705 \u5B9F\u65BD\u4E2D':'\u2212')+'</div></div>';
+  });
+
+  var R=document.getElementById('screenResult');
+  R.innerHTML=
+    '<div class="result-hero">'+
+      '<div class="your-label">\u30D5\u30A9\u30ED\u30EF\u30FC1\u4EBA\u3042\u305F\u308A \u5E74\u9593\u53CE\u76CA\u30DD\u30C6\u30F3\u30B7\u30E3\u30EB</div>'+
+      '<div class="big-number animate-in">\xA5'+best[1].range[0].toLocaleString()+'\u301C'+best[1].range[1].toLocaleString()+'</div>'+
+      '<div class="unit">'+g.icon+' '+g.name+' \u00D7 '+best[1].label+'\uFF08\u6700\u9069\u30E2\u30C7\u30EB\uFF09</div>'+
+      '<div class="rank-badge rank-'+tier+'">'+tierLabels[tier]+'</div>'+
+    '</div>'+
+
+    '<div class="loss-card pulse-red">'+
+      '<div class="loss-label">\u26A0\uFE0F \u3042\u306A\u305F\u304C\u4ECA\u3001\u53D6\u308A\u3053\u307C\u3057\u3066\u3044\u308B\u91D1\u984D</div>'+
+      '<div class="loss-sublabel">\u6B63\u3057\u3044\u30D5\u30A1\u30CD\u30EB\u304C\u3042\u308C\u3070\u5F97\u3089\u308C\u3066\u3044\u305F\u306F\u305A\u306E\u58F2\u4E0A</div>'+
+      '<div class="loss-amount animate-in">\xA5'+fmtY(gap)+'<span style="font-size:18px;color:#888">/\u5E74</span></div>'+
+      '<div class="loss-note">\u73FE\u5728\u306E\u5E74\u5546 <strong>\xA5'+fmtY(curRevenue)+'</strong> \u2192 \u30DD\u30C6\u30F3\u30B7\u30E3\u30EB <strong>\xA5'+fmtY(Math.round(annPot))+'</strong></div>'+
+    '</div>'+
+
+    '<div class="timeline-loss">'+
+      '<h3>\u23F0 \u53D6\u308A\u3053\u307C\u3057\u304C\u7A4D\u307F\u4E0A\u304C\u308B\u30B9\u30D4\u30FC\u30C9</h3>'+
+      '<div class="timeline-row"><div class="tl-period">\u6BCE\u65E5</div><div class="tl-amount">\xA5'+fmtY(dGap)+'</div></div>'+
+      '<div class="timeline-row"><div class="tl-period">\u6BCE\u9031</div><div class="tl-amount">\xA5'+fmtY(wGap)+'</div></div>'+
+      '<div class="timeline-row"><div class="tl-period">\u6BCE\u6708</div><div class="tl-amount">\xA5'+fmtY(mGap)+'</div></div>'+
+      '<div class="timeline-row"><div class="tl-period">\u5E74\u9593</div><div class="tl-amount" style="font-size:22px">\xA5'+fmtY(gap)+'</div></div>'+
+      '<div class="timeline-row" style="border-bottom:none"><div class="tl-period">3\u5E74\u653E\u7F6E\u3059\u308B\u3068\u2026</div><div class="tl-amount" style="font-size:22px">\xA5'+fmtY(gap*3)+'</div></div>'+
+    '</div>'+
+
+    '<div class="funnel-section">'+
+      '<h3>\uD83D\uDD2C \u3042\u306A\u305F\u306E\u30D5\u30A1\u30CD\u30EB\u5065\u5EB7\u8A3A\u65AD</h3>'+
+      '<div class="funnel-grid">'+
+        '<div class="funnel-metric '+(lrStatus==='good'?'fm-good':lrStatus==='warn'?'fm-warn':'fm-bad')+'">'+
+          '<div class="fm-label">\u30D5\u30A9\u30ED\u30EF\u30FC\u2192\u30EA\u30B9\u30C8<br>\u8EE2\u63DB\u7387</div>'+
+          '<div class="fm-value">'+listRateStr+'%</div>'+
+          '<div class="fm-bench '+lrStatus+'">'+lrLabel+'\uFF08\u76EE\u5B89'+benchLR+'%\uFF09</div>'+
+        '</div>'+
+        '<div class="funnel-metric '+(lrevStatus==='good'?'fm-good':lrevStatus==='warn'?'fm-warn':'fm-bad')+'">'+
+          '<div class="fm-label">\u30EA\u30B9\u30C81\u4EF6\u3042\u305F\u308A<br>\u5E74\u9593\u53CE\u76CA</div>'+
+          '<div class="fm-value">\xA5'+(listRevenue>0?listRevenue.toLocaleString():'\u2212')+'</div>'+
+          '<div class="fm-bench '+lrevStatus+'">'+(listSize>0?lrevLabel+'\uFF08\u76EE\u5B89\xA5'+benchLRev.toLocaleString()+')':'\u30C7\u30FC\u30BF\u306A\u3057')+'</div>'+
+        '</div>'+
+        '<div class="funnel-metric" style="color:var(--accent)">'+
+          '<div class="fm-label">\u30EA\u30B9\u30C81\u4EF6\u3042\u305F\u308A<br>\u30DD\u30C6\u30F3\u30B7\u30E3\u30EB</div>'+
+          '<div class="fm-value" style="color:var(--accent)">\xA5'+(idealListRev>0?idealListRev.toLocaleString():'\u2212')+'</div>'+
+          '<div class="fm-bench" style="background:rgba(99,102,241,.1);color:var(--accent)">\u6700\u9069\u5316\u5F8C\u306E\u76EE\u6A19\u5024</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="funnel-visual">'+
+        '<div class="funnel-stage">'+
+          '<div class="funnel-bar" style="height:'+fBarF+'%;background:linear-gradient(180deg,#3b82f6,#2563eb)">'+
+            '<div class="funnel-bar-label">'+fmtY(funnelFollowers)+'</div>'+
+          '</div>'+
+          '<div class="funnel-stage-label">\u30D5\u30A9\u30ED\u30EF\u30FC</div>'+
+        '</div>'+
+        '<div class="funnel-stage">'+
+          '<div class="funnel-conversion-rate">'+listRateStr+'%</div>'+
+          '<div class="funnel-bar" style="height:'+Math.max(8,fBarL)+'%;background:linear-gradient(180deg,#8b5cf6,#6d28d9)">'+
+            '<div class="funnel-bar-label">'+fmtY(funnelList)+'</div>'+
+          '</div>'+
+          '<div class="funnel-stage-label">\u30EA\u30B9\u30C8</div>'+
+        '</div>'+
+        '<div class="funnel-stage">'+
+          '<div class="funnel-conversion-rate">'+(funnelList>0&&estBuyers>0?((estBuyers/funnelList)*100).toFixed(1)+'%':'\u2212')+'</div>'+
+          '<div class="funnel-bar" style="height:'+Math.max(5,fBarB)+'%;background:linear-gradient(180deg,#f59e0b,#d97706)">'+
+            '<div class="funnel-bar-label">'+(estBuyers>0?'\u301C'+estBuyers+'\u4EBA':'?')+'</div>'+
+          '</div>'+
+          '<div class="funnel-stage-label">\u8CFC\u5165\u8005</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+
+    (bottlenecks.length>0?
+    '<div class="bottleneck-card">'+
+      '<h3>\uD83D\uDEA8 \u3042\u306A\u305F\u306E\u30D5\u30A1\u30CD\u30EB\u306E\u30DC\u30C8\u30EB\u30CD\u30C3\u30AF</h3>'+
+      bottlenecks.map(function(b){return '<div class="bottleneck-item"><div class="bn-icon">'+b.icon+'</div><div class="bn-text">'+b.text+'</div></div>';}).join('')+
+    '</div>':'')+
+
+    '<div class="gauge-section">'+
+      '<h3>\uD83D\uDCCA \u73FE\u5728\u5730 vs \u30DD\u30C6\u30F3\u30B7\u30E3\u30EB</h3>'+
+      '<div class="gauge-track">'+
+        '<div class="gauge-potential" style="width:100%"></div>'+
+        '<div class="gauge-current" style="width:'+gaugePct+'%">'+(gaugePct>12?'\u73FE\u5728':'')+'</div>'+
+      '</div>'+
+      '<div class="gauge-numbers">'+
+        '<div class="gauge-num"><div class="label">\u73FE\u5728\u306E\u5E74\u5546</div><div class="value current">\xA5'+fmtY(curRevenue)+'</div></div>'+
+        '<div class="gauge-arrow">\u2192</div>'+
+        '<div class="gauge-num"><div class="label">\u30DD\u30C6\u30F3\u30B7\u30E3\u30EB</div><div class="value potential">\xA5'+fmtY(Math.round(annPot))+'</div></div>'+
+        '<div class="gauge-arrow">\uFF1D</div>'+
+        '<div class="gauge-num"><div class="label">\u53D6\u308A\u3053\u307C\u3057</div><div class="value gap">\xA5'+fmtY(gap)+'</div></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="per-follower-card">'+
+      '<h3>\uD83D\uDC64 \u30D5\u30A9\u30ED\u30EF\u30FC1\u4EBA\u3042\u305F\u308A\u5E74\u9593\u53CE\u76CA\uFF08\u73FE\u5728 vs \u6700\u9069\u5316\u5F8C\uFF09</h3>'+
+      '<div class="pf-comparison">'+
+        '<div class="pf-box current-box"><div class="pf-label">\u73FE\u5728</div><div class="pf-value">\xA5'+curPF.toLocaleString()+'</div></div>'+
+        '<div class="pf-arrow">\u2192</div>'+
+        '<div class="pf-box potential-box"><div class="pf-label">\u6700\u9069\u5316\u5F8C</div><div class="pf-value">\xA5'+potPF.toLocaleString()+'</div></div>'+
+      '</div>'+
+      '<div class="pf-multiplier">\uD83D\uDD25 '+mult+'\u500D\u306E\u30A2\u30C3\u30D7\u30B5\u30A4\u30C9</div>'+
+    '</div>'+
+
+    '<div class="model-section">'+
+      '<h3>\uD83D\uDCCA \u30DE\u30CD\u30BF\u30A4\u30BA\u30E2\u30C7\u30EB\u5225 \u53CE\u76CA\u6027\uFF081\u30D5\u30A9\u30ED\u30EF\u30FC/\u5E74\uFF09</h3>'+
+      '<div class="model-bars">'+barsHTML+'</div>'+
+    '</div>'+
+
+    '<div class="insight-box">'+
+      '<h3>\uD83E\uDDE0 \u30B8\u30E3\u30F3\u30EB\u5206\u6790</h3>'+
+      '<p>'+g.insight+'</p>'+
+    '</div>'+
+
+    '<div class="insight-box">'+
+      '<h3>\u26A1 \u53D6\u308A\u3053\u307C\u3057\u3092\u56DE\u53CE\u3059\u308B3\u30B9\u30C6\u30C3\u30D7</h3>'+
+      '<p>'+
+        '<strong>\u2460 \u30EA\u30B9\u30C8\u8EE2\u63DB\u7387\u3092'+benchLR+'%\u4EE5\u4E0A\u306B\u5F15\u304D\u4E0A\u3052\u308B</strong><br>'+
+        '\u30D5\u30A9\u30ED\u30EF\u30FC\u3092\u300C\u81EA\u5206\u306E\u8CC7\u7523\u300D\u3067\u3042\u308B\u30EA\u30B9\u30C8\u306B\u5909\u63DB\u3059\u308B\u3002<span class="hl">\u9B45\u529B\u7684\u306A\u30EA\u30FC\u30C9\u30DE\u30B0\u30CD\u30C3\u30C8 \u00D7 \u6700\u9069\u5316\u3055\u308C\u305FCTA\u5C0E\u7DDA</span>\u304C\u9375\u3002<br><br>'+
+        '<strong>\u2461 \u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30D5\u30A1\u30CD\u30EB\u3067\u30EA\u30B9\u30C8\u5358\u4FA1\u3092\u6700\u5927\u5316\u3059\u308B</strong><br>'+
+        '\u30A6\u30A7\u30D3\u30CA\u30FC \u2192 \u500B\u5225\u76F8\u8AC7 \u2192 <span class="hl">120\u4E07\u5186\u4EE5\u4E0A\u306E\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30AA\u30D5\u30A1\u30FC</span>\u306E\u6210\u7D04\u30D5\u30A1\u30CD\u30EB\u3092\u69CB\u7BC9\u3002\u30EA\u30B9\u30C81\u4EF6\u3042\u305F\u308A\xA5'+benchLRev.toLocaleString()+'\u4EE5\u4E0A\u3092\u76EE\u6307\u3059\u3002<br><br>'+
+        '<strong>\u2462 Value Ladder\u306E\u5168\u968E\u5C64\u3092\u57CB\u3081\u3066\u53D6\u308A\u3053\u307C\u3057\u30BC\u30ED\u306B\u3059\u308B</strong><br>'+
+        '\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u306B\u81F3\u3089\u306A\u304B\u3063\u305F\u4EBA\u3092<span class="hl">\u30D0\u30C3\u30AF\u30A8\u30F3\u30C9\uFF0830\u301C120\u4E07\uFF09\u2192 \u30DF\u30C9\u30EB\uFF083\u301C30\u4E07\uFF09\u2192 \u30B3\u30DF\u30E5\u30CB\u30C6\u30A3</span>\u3067\u53D7\u3051\u6B62\u3081\u308B\u3002\u5168\u30EC\u30A4\u30E4\u30FC\u306B\u53CE\u76CA\u30DD\u30A4\u30F3\u30C8\u304C\u3042\u308B\u968E\u6BB5\u8A2D\u8A08\u3067LTV\u3092\u6700\u5927\u5316\u3002'+
+      '</p>'+
+    '</div>'+
+
+    '<div class="cta-box">'+
+      '<h3>\u3053\u306E\u53D6\u308A\u3053\u307C\u3057\u3001<br>\u3042\u3068\u3069\u308C\u304F\u3089\u3044\u653E\u7F6E\u3057\u307E\u3059\u304B\uFF1F</h3>'+
+      '<p>'+
+        '\u3042\u306A\u305F\u304C\u4ECA\u65E5\u52D5\u304B\u306A\u304F\u3066\u3082\u3001<strong>\u6BCE\u65E5\xA5'+fmtY(dGap)+'</strong>\u304C\u9759\u304B\u306B\u6D88\u3048\u3066\u3044\u304D\u307E\u3059\u3002<br><br>'+
+        '<strong>Strategic Funnel CLUB</strong>\u3067\u306F\u3001\u3042\u306A\u305F\u306E\u30B8\u30E3\u30F3\u30EB\u306B\u6700\u9069\u5316\u3055\u308C\u305F<br>'+
+        '<strong>\u30CF\u30A4\u30C1\u30B1\u30C3\u30C8\u30D5\u30A1\u30CD\u30EB\u00AE</strong>\u306E\u8A2D\u8A08\u30FB\u69CB\u7BC9\u30FB\u904B\u7528\u3092<br>'+
+        '\u30DE\u30F3\u30C4\u30FC\u30DE\u30F3\u3067\u5B8C\u5168\u30B5\u30DD\u30FC\u30C8\u3057\u3066\u3044\u307E\u3059\u3002'+
+      '</p>'+
+      '<button class="cta-btn" onclick="window.open(\'https://strategicfunnelclub.com\',\'_blank\')">\u53D6\u308A\u3053\u307C\u3057\u3092\u56DE\u53CE\u3059\u308B \u2192</button>'+
+      '<div class="cta-sub">\u203B \u307E\u305A\u306F\u7121\u6599\u30A6\u30A7\u30D3\u30CA\u30FC\u3067\u8A73\u3057\u3044\u6226\u7565\u3092\u304A\u8A71\u3057\u3057\u307E\u3059</div>'+
+    '</div>'+
+
+    '<button class="restart-btn" onclick="restart()">\uD83D\uDD04 \u3082\u3046\u4E00\u5EA6\u8A3A\u65AD\u3059\u308B</button>';
+
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  R.classList.add('active');
+  document.querySelectorAll('.progress-step').forEach(function(p){p.classList.add('done')});
+  document.querySelectorAll('.step-label').forEach(function(l){l.classList.add('done')});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){
+  S.genre=null;S.followers=null;S.list=null;S.monetize=[];S.revenue=0;
+  document.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected')});
+  document.querySelectorAll('.quick-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('revenueInput').value='';
+  ['btn1','btn2','btn3','btn4'].forEach(function(id){document.getElementById(id).disabled=true});
+  goTo(1);
+}
+
+/* INIT */
+buildProgress();
+buildOptions('genreOpts',GENRES,'genre','btn1');
+buildOptions('followerOpts',FOLLOWERS,'followers','btn2');
+buildOptions('listOpts',LISTS,'list','btn3');
+buildMonetize();
+buildRevenueQuick();
+goTo(1);
+</script>
+</body>
+</html>
